@@ -55,3 +55,29 @@
 | `python manage.py makemigrations` | Δημιουργεί νέα αρχεία migration βάσει του `models.py` |
 | `python manage.py migrate` | Εφαρμόζει τα migrations στη βάση δεδομένων |
 | `python manage.py createsuperuser` | Δημιουργεί διαχειριστή για το `/admin/` |
+
+## 4. Frontend Initialization (React + Vite)
+
+### Architecture
+- **Decoupled / Headless Architecture**: 
+  - Backend: Django REST Framework (`http://localhost:8000`) -> Data Provider (JSON).
+  - Frontend: React SPA via Vite (`http://localhost:5173`) -> Presentation Layer.
+- **Same-Origin Policy & CORS**: Επειδή frontend και backend τρέχουν σε διαφορετικά ports, απαιτείται ρύθμιση CORS στο Django για να επιτρέπονται τα cross-origin αιτήματα.
+
+### Key Tools & Terms
+- **Vite**: Modern build tool που αξιοποιεί native ES Modules και esbuild για instant HMR (Hot Module Replacement) και ταχύτατο bundling.
+- **React**: Declarative, Component-Based UI library. Χρησιμοποιεί Virtual DOM και αλγόριθμο συμφιλίωσης (Reconciliation) για βέλτιστα DOM updates.
+- **JSX (JavaScript XML)**: Συντακτική ζάχαρη (syntactic sugar) για τη δημιουργία React elements μέσα σε JavaScript. Μεταγλωττίζεται σε κανονική JS κατά το build.
+
+### Useful Commands
+- `npm create vite@latest frontend -- --template react` (Scaffold project)
+- `cd frontend && npm install` (Install dependencies)
+- `npm run dev` (Start local development server)
+
+### React Fundamentals
+- **Functional Components**: Συναρτήσεις JavaScript που επιστρέφουν JSX (UI).
+- **JSX Syntax Rules**:
+  - Χρήση `className` αντί για `class` (λόγω reserved keyword στη JS).
+  - Όλα τα tags πρέπει να κλείνουν αυτοτελώς (self-closing tags π.χ. `<img />`).
+  - Επιστροφή ενός ενιαίου root element ή React Fragment (`<>...</>`).
+- **HMR (Hot Module Replacement)**: Η δυνατότητα του Vite να αντικαθιστά modules στον browser εν ώρα εκτέλεσης χωρίς full page reload, διατηρώντας το state της εφαρμογής.
