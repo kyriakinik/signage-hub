@@ -128,6 +128,7 @@ signage-hub/
 - [x] Σχεδιασμός βάσης & μοντέλου `Screen`
 - [x] Υλοποίηση REST API με CRUD λειτουργίες (`/api/screens/`)
 - [x] Αρχικοποίηση React SPA μέσω Vite
-- [ ] Σύνδεση Frontend με το REST API (Data Fetching)
-- [ ] Dashboard προβολής και διαχείρισης οθονών
-- [ ] Real-time ενημέρωση κατάστασης (Online / Offline)
+- [x] Σύνδεση Frontend με το REST API (Data Fetching)
+- [x] Dashboard προβολής οθονών (ScreenCard)
+- [x] Προσθήκη νέας οθόνης από το Frontend (POST Form)
+- [ ] Διαγραφή οθόνης / Toggle κατάστασης (DELETE / PATCH)

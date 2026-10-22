@@ -2,120 +2,108 @@
 
 ## 1. Η Αρχιτεκτονική Full-Stack (Η Μεγάλη Εικόνα)
 ```
-[ Frontend: React / HTML / CSS / JS ]
-                │
-         HTTP (JSON)
-                ▼
-[ Backend: Django REST Framework ]
-                │
-           SQL Queries (ORM)
-                ▼
-[ Database: SQLite (db.sqlite3) ]
+[ Frontend: React / Vite ] ──(HTTP JSON)──> [ Backend: Django REST ] ──(ORM)──> [ SQLite DB ]
+  localhost:5173                               localhost:8000                     db.sqlite3
 ```
 
 ---
 
-## 2. Django Backend — Τα Βασικά Concepts
-
-### Α. Virtual Environment (`venv`)
-- **Τι είναι:** Ένας απομονωμένος φάκελος με δική του εγκατάσταση Python και βιβλιοθηκών.
-- **Γιατί:** Για να μην μπερδεύονται οι εκδόσεις διαφορετικών projects.
-- **Εντολή δημιουργίας:** `python -m venv venv`
-- **Εντολή ενεργοποίησης (CMD):** `venv\Scripts\activate.bat`
-
-### Β. Project vs App
-- **Project (`core`):** Ολόκληρη η εφαρμογή και οι κεντρικές ρυθμίσεις (`settings.py`, `urls.py`).
-- **App (`screens`):** Ένα συγκεκριμένο feature (π.χ. διαχείριση οθονών). Περιέχει τα δικά του models, views, serializers.
-- **Εντολή δημιουργίας app:** `python manage.py startapp screens`
-
-### Γ. Models & ORM (`screens/models.py`)
-- **Τι είναι:** Ορισμός της δομής της βάσης δεδομένων χρησιμοποιώντας Python κλάσεις.
-- **ORM (Object-Relational Mapping):** Μηχανισμός που μετατρέπει αυτόματα τις Python κλάσεις σε SQL πίνακες χωρίς να γράφουμε SQL.
-- **`__str__(self)`:** Μέθοδος που ορίζει πώς θα εμφανίζεται το αντικείμενο ως κείμενο (π.χ. στο Django Admin).
-
-### Δ. Migrations (`makemigrations` & `migrate`)
-1. **`python manage.py makemigrations`:** Διαβάζει το `models.py` και φτιάχνει το "σχέδιο" αλλαγών (`migrations/0001_initial.py`).
-2. **`python manage.py migrate`:** Εφαρμόζει το σχέδιο στην πραγματική βάση δεδομένων (`db.sqlite3`).
-
-### Ε. Django REST Framework (DRF)
-- **Serializer (`serializers.py`):** 
-  - *Serialization:* Μετατρέπει Python Objects σε JSON.
-  - *Deserialization:* Μετατρέπει εισερχόμενο JSON σε Python Objects με ταυτόχρονο validation (έλεγχο εγκυρότητας).
-- **ViewSet (`views.py`):**
-  - Συγκεντρώνει όλη τη λογική CRUD (Create, Read, Update, Delete) σε μία κλάση.
-- **DefaultRouter (`urls.py`):**
-  - Παράγει αυτόματα τα URLs για όλες τις λειτουργίες CRUD (`GET`, `POST`, `PUT`, `DELETE`).
-
----
-
-## 3. Βασικές Εντολές Django (Cheat-Sheet)
-| Εντολή | Τι κάνει |
-| :--- | :--- |
-| `python manage.py runserver` | Ξεκινάει τον τοπικό web server στο `http://127.0.0.1:8000/` |
-| `python manage.py makemigrations` | Δημιουργεί νέα αρχεία migration βάσει του `models.py` |
-| `python manage.py migrate` | Εφαρμόζει τα migrations στη βάση δεδομένων |
-| `python manage.py createsuperuser` | Δημιουργεί διαχειριστή για το `/admin/` |
-
-## 4. Frontend Initialization (React + Vite)
-
-### Architecture
-- **Decoupled / Headless Architecture**: 
-  - Backend: Django REST Framework (`http://localhost:8000`) -> Data Provider (JSON).
-  - Frontend: React SPA via Vite (`http://localhost:5173`) -> Presentation Layer.
-- **Same-Origin Policy & CORS**: Επειδή frontend και backend τρέχουν σε διαφορετικά ports, απαιτείται ρύθμιση CORS στο Django για να επιτρέπονται τα cross-origin αιτήματα.
-
-### Key Tools & Terms
-- **Vite**: Modern build tool που αξιοποιεί native ES Modules και esbuild για instant HMR (Hot Module Replacement) και ταχύτατο bundling.
-- **React**: Declarative, Component-Based UI library. Χρησιμοποιεί Virtual DOM και αλγόριθμο συμφιλίωσης (Reconciliation) για βέλτιστα DOM updates.
-- **JSX (JavaScript XML)**: Συντακτική ζάχαρη (syntactic sugar) για τη δημιουργία React elements μέσα σε JavaScript. Μεταγλωττίζεται σε κανονική JS κατά το build.
-
-### Useful Commands
-- `npm create vite@latest frontend -- --template react` (Scaffold project)
-- `cd frontend && npm install` (Install dependencies)
-- `npm run dev` (Start local development server)
-
-### React Fundamentals
-- **Functional Components**: Συναρτήσεις JavaScript που επιστρέφουν JSX (UI).
-- **JSX Syntax Rules**:
-  - Χρήση `className` αντί για `class` (λόγω reserved keyword στη JS).
-  - Όλα τα tags πρέπει να κλείνουν αυτοτελώς (self-closing tags π.χ. `<img />`).
-  - Επιστροφή ενός ενιαίου root element ή React Fragment (`<>...</>`).
-- **HMR (Hot Module Replacement)**: Η δυνατότητα του Vite να αντικαθιστά modules στον browser εν ώρα εκτέλεσης χωρίς full page reload, διατηρώντας το state της εφαρμογής.
-
-### Props & List Rendering
-- **Props (Properties)**: Παράμετροι που περνάμε από Parent σε Child component. Είναι αυστηρά **read-only (immutable)**.
-- **List Rendering (`.map()`)**: Μετατροπή πίνακα αντικειμένων σε πίνακα JSX elements.
-- **The `key` Prop (Interview Must-Know)**: 
-  - Υποχρεωτικό μοναδικό αναγνωριστικό (π.χ. `key={screen.id}`) σε κάθε στοιχείο λίστας.
-  - Βοηθά τον αλγόριθμο Reconciliation του React να εντοπίζει ποια στοιχεία άλλαξαν/προστέθηκαν/διαγράφηκαν, αποτρέποντας περιττά re-renders ολόκληρου του DOM.
-
----
-
-## 5. Πώς περιγράφω το Project στη Συνέντευξη (Elevator Pitch)
-
+## 2. Πώς περιγράφω το Project στη Συνέντευξη (Elevator Pitch)
 > *"Έφτιαξα το **Signage Hub**, μια full-stack cloud πλατφόρμα διαχείρισης ψηφιακών οθονών (Digital Signage). 
 > Στο Backend χρησιμοποίησα **Python & Django REST Framework** για να στήσω ένα headless REST API με SQLite και Django ORM, υλοποιώντας πλήρες CRUD για τις οθόνες. 
-> Στο Frontend χρησιμοποίησα **React με Vite**, οργανωμένο σε επαναχρησιμοποιήσιμα components (όπως το ScreenCard), διαχειριζόμενο το state με React Hooks (`useState`) και επικοινωνώντας ασύγχρονα με το API μέσω fetch."*
+> Στο Frontend χρησιμοποίησα **React με Vite**, οργανωμένο σε επαναχρησιμοποιήσιμα components (όπως το ScreenCard και AddScreenForm), διαχειριζόμενο το state με React Hooks (`useState`, `useEffect`) και επικοινωνώντας ασύγχρονα με το API μέσω fetch."*
 
 ---
 
-## 6. React με Απλές Αναλογίες (Mental Models)
+## 3. Django Backend — Βασικά Concepts
 
-- **Component (π.χ. `ScreenCard`)**: Σκέψου το σαν ένα **τουβλάκι LEGO**. Το φτιάχνεις μία φορά και το χρησιμοποιείς όσες φορές θες με διαφορετικό περιεχόμενο.
-- **Props**: Οι **οδηγίες** που δίνεις στο τουβλάκι LEGO όταν το τοποθετείς (π.χ. *"εσύ είσαι η οθόνη Reception και είσαι online"*). Είναι αυστηρά **read-only** (το τουβλάκι δεν αλλάζει μόνο του τις οδηγίες του).
-- **State (`useState`)**: Η **εσωτερική μνήμη** της εφαρμογής. Αν αλλάξει το state, το React ξαναζωγραφίζει αυτόματα την οθόνη.
-- **Virtual DOM**: Το **πρόχειρο σχεδιάγραμμα σε χαρτί**. Πριν το React πάει να σκάψει και να αλλάξει τον πραγματικό browser (που είναι αργό), σχεδιάζει τις αλλαγές στο Virtual DOM και εφαρμόζει μόνο τη διαφορά.
+### Α. Virtual Environment (`venv`)
+- **Τι είναι:** Απομονωμένος φάκελος με δική του Python και βιβλιοθήκες.
+- **Γιατί:** Για να μην συγκρούονται οι εκδόσεις διαφορετικών projects.
+- **Εντολή δημιουργίας:** `python -m venv venv`
+- **Ενεργοποίηση (PowerShell):** `.\venv\Scripts\Activate.ps1` (ή `venv\Scripts\activate.bat`)
+
+### Β. Models & ORM (`screens/models.py`)
+- **Model:** Python κλάση που ορίζει τη δομή ενός πίνακα στη βάση (πεδία `name`, `location`, `status`, `message`).
+- **ORM (Object-Relational Mapping):** Μετατρέπει αυτόματα τις Python κλάσεις σε SQL ερωτήματα χωρίς να γράφουμε raw SQL.
+
+### Γ. Migrations (`makemigrations` & `migrate`)
+1. `python manage.py makemigrations`: Διαβάζει το `models.py` και φτιάχνει το σχέδιο αλλαγών.
+2. `python manage.py migrate`: Εφαρμόζει το σχέδιο στην πραγματική βάση δεδομένων (`db.sqlite3`).
+
+### Δ. Django REST Framework (DRF)
+- **Serializer (`serializers.py`):** "Μεταφραστής". Μετατρέπει Django Objects σε JSON (για έξοδο) και JSON σε Django Objects με validation (για είσοδο).
+- **ViewSet (`views.py`):** Συγκεντρώνει όλη τη λογική CRUD (GET, POST, PUT, DELETE) σε μία κλάση.
+- **DefaultRouter (`urls.py`):** Παράγει αυτόματα τα URLs για όλα τα endpoints.
 
 ---
 
-## 7. SOS Ερωτήσεις Συνέντευξης (Q&A)
+## 4. React Frontend — Βασικά Concepts
+
+### Α. Core Όροι
+- **Component**: Ανεξάρτητο, επαναχρησιμοποιήσιμο κομμάτι UI (σαν τουβλάκι LEGO). Είναι συνάρτηση JS που επιστρέφει JSX.
+- **JSX**: JavaScript XML. Μοιάζει με HTML αλλά μεταγλωττίζεται σε JavaScript. (Κανόνας: `className` αντί για `class`).
+- **Props**: Παράμετροι που περνάμε από Parent σε Child component. Είναι αυστηρά **read-only (immutable)**.
+- **State (`useState`)**: Η εσωτερική μνήμη ενός component. Όταν αλλάζει το state, το React κάνει αυτόματα re-render το UI.
+- **Side Effects (`useEffect`)**: Κώδικας που αλληλεπιδρά με τον έξω κόσμο (π.χ. `fetch` από το API). Με `[]` εκτελείται μόνο 1 φορά στο αρχικό φόρτωμα.
+
+---
+
+## 5. Η "Γραμματική" του Κώδικα (JavaScript Syntax Cheat-Sheet)
+
+### 1. Arrow Functions (`=>`)
+Σύντομος τρόπος γραφής συναρτήσεων.
+- Παραδοσιακό: `function(x) { return x * 2; }`
+- Σύγχρονο (Arrow): `(x) => x * 2`
+
+### 2. Events & Inputs: `(e) => setName(e.target.value)`
+- `e`: Το Event αντικείμενο που δημιουργεί ο browser όταν πληκτρολογείς.
+- `e.target`: Το HTML στοιχείο (`<input>`).
+- `e.target.value`: Το κείμενο που υπάρχει μέσα στο input εκείνη τη στιγμή.
+- `e.preventDefault()`: Σταματάει το αυτόματο reload της σελίδας όταν υποβάλλεται μια φόρμα.
+
+### 3. Asynchronous Fetch & Promises (`.then` / `.catch`)
+- `fetch(url)`: Στέλνει το αίτημα στο δίκτυο (επιστρέφει Promise / υπόσχεση).
+- `.then(res => res.json())`: **Μόλις** απαντήσει ο server, μετάτρεψε το κείμενο σε JSON αντικείμενο.
+- `.then(data => setScreens(data))`: **Μόλις** μετατραπεί, αποθήκευσέ το στο State.
+- `.catch(err => ...)`: **Αν** κάτι αποτύχει (π.χ. κλειστό backend), διαχειρίσου το σφάλμα.
+
+### 4. Spread Operator (`...`) & Immutability
+- ΛΑΘΟΣ: `screens.push(newScreen)` (Αλλάζει τον ίδιο πίνακα, το React δεν το παίρνει χαμπάρι και δεν ανανεώνει).
+- ΣΩΣΤΟ: `setScreens([...screens, newScreen])` (Ανοίγει τα παλιά στοιχεία και φτιάχνει **καινούριο** πίνακα στη μνήμη).
+
+### 5. JSON Μετατροπές
+- `JSON.stringify(obj)`: Μετατρέπει αντικείμενο JS σε απλό string κειμένου για αποστολή μέσω HTTP POST.
+- `response.json()`: Μετατρέπει το κείμενο που λάβαμε πίσω σε αντικείμενο JS.
+
+---
+
+## 6. SOS Ερωτήσεις Συνέντευξης (Q&A)
 
 **Ερ. 1: Ποια η διαφορά μεταξύ Props και State;**
 - **Props**: Δεδομένα που έρχονται *από έξω* (από τον γονέα). Είναι αμετάβλητα (immutable).
-- **State**: Δεδομένα που ζουν *μέσα* στο component και μπορούν να αλλάξουν (mutable) με την πάροδο του χρόνου ή από ενέργειες του χρήστη.
+- **State**: Δεδομένα που ζουν *μέσα* στο component και μπορούν να αλλάξουν (mutable) μέσω της συνάρτησης `setState`.
 
 **Ερ. 2: Γιατί βάζουμε `key` όταν κάνουμε `.map()`;**
-- Βοηθά το React στον αλγόριθμο **Reconciliation**. Αν έχουμε 100 οθόνες και αλλάξει μόνο η μία, το React ξέρει από το `id` ποια συγκεκριμένη κάρτα να ενημερώσει, χωρίς να ξαναφτιάξει τις υπόλοιπες 99 (καλύτερο performance).
+- Βοηθά το React στον αλγόριθμο **Reconciliation**. Αν έχουμε 100 οθόνες και αλλάξει μόνο η μία, το React ξέρει από το μοναδικό `id` ποια συγκεκριμένη κάρτα να ενημερώσει, χωρίς να ξαναφτιάξει τις υπόλοιπες 99 (καλύτερο performance).
 
-**Ερ. 3: Τι είναι το CORS και γιατί χρειάστηκε ρύθμιση;**
-- **Cross-Origin Resource Sharing**. Επειδή το React τρέχει στο port `5173` και το Django στο port `8000`, ο browser θεωρεί ότι είναι διαφορετικά sites και μπλοκάρει τα αιτήματα για λόγους ασφαλείας. Βάλαμε το `django-cors-headers` για να επιτρέψουμε στο frontend να διαβάζει τα δεδομένα.
+**Ερ. 3: Τι είναι το CORS και πώς το αντιμετωπίσαμε;**
+- **Cross-Origin Resource Sharing**. Επειδή το React τρέχει στο port `5173` και το Django στο port `8000`, ο browser μπλοκάρει τα αιτήματα για λόγους ασφαλείας (Same-Origin Policy). Εγκαταστήσαμε το `django-cors-headers` στο backend και ρυθμίσαμε το middleware ώστε να επιτρέπει τα αιτήματα από το frontend.
+
+**Ερ. 4: Πώς χειρίζεσαι τα network requests στο UI;**
+- Πάντα με 3 καταστάσεις (States):
+  1. `loading`: Ένδειξη αναμονής όσο ταξιδεύουν τα δεδομένα.
+  2. `error`: Μήνυμα σφάλματος αν ο server είναι κλειστός.
+  3. `data`: Εμφάνιση των δεδομένων μόλις ληφθούν.
+
+---
+
+## 7. Βασικές Εντολές (Cheat-Sheet)
+
+| Εντολή | Τι κάνει |
+| :--- | :--- |
+| `python manage.py runserver` | Ξεκινάει το Django backend (`http://127.0.0.1:8000/`) |
+| `python manage.py makemigrations` | Δημιουργεί νέα migrations βάσει αλλαγών στα models |
+| `python manage.py migrate` | Εφαρμόζει τα migrations στη βάση SQLite |
+| `npm run dev` | Ξεκινάει το Vite development server (`http://localhost:5173/`) |
+| `npm install` | Εγκαθιστά τα dependencies του `package.json` |
