@@ -1,6 +1,13 @@
-function ScreenCard({ screen }) {
-  // Ελέγχουμε αν η οθόνη είναι online για να δώσουμε ανάλογο στυλ
+function ScreenCard({ screen, onDelete }) {
   const isOnline = screen.status === 'online';
+
+  const handleDeleteClick = () => {
+    // Ζητάμε επιβεβαίωση από τον χρήστη πριν τη διαγραφή
+    const confirmed = window.confirm(`Είστε σίγουροι ότι θέλετε να διαγράψετε την "${screen.name}";`);
+    if (confirmed) {
+      onDelete(screen.id);
+    }
+  };
 
   return (
     <div className="screen-card">
@@ -19,6 +26,11 @@ function ScreenCard({ screen }) {
         <small>Προβαλλόμενο Μήνυμα:</small>
         <p>"{screen.message}"</p>
       </div>
+
+      {/* Κουμπί Διαγραφής */}
+      <button className="btn-delete" onClick={handleDeleteClick}>
+        🗑️ Διαγραφή Οθόνης
+      </button>
     </div>
   );
 }

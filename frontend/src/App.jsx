@@ -8,7 +8,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Φόρτωση οθονών στο αρχικό άνοιγμα
+  // 1. GET: Φόρτωση οθονών
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/screens/')
       .then((response) => {
@@ -28,10 +28,27 @@ function App() {
       });
   }, []);
 
-  // Συνάρτηση που καλείται από τη φόρμα όταν αποθηκευτεί επιτυχώς μια νέα οθόνη
+  // 2. POST: Προσθήκη οθόνης
   const handleScreenAdded = (newScreen) => {
-    // Χρησιμοποιούμε spread operator για να φτιάξουμε νέο πίνακα (Immutability)
     setScreens((prevScreens) => [...prevScreens, newScreen]);
+  };
+
+  // 3. DELETE: Διαγραφή οθόνης
+  const handleDeleteScreen = (screenId) => {
+    fetch(`http://127.0.0.1:8000/api/screens/${screenId}/`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Αποτυχία διαγραφής οθόνης');
+        }
+        // Αφαιρούμε την οθόνη από το State χρησιμοποιώντας filter
+        setScreens((prevScreens) => prevScreens.filter((s) => s.id !== screenId));
+      })
+      .catch((err) => {
+        console.error("Σφάλμα κατά τη διαγραφή:", err);
+        alert("Σφάλμα κατά τη διαγραφή της οθόνης.");
+      });
   };
 
   return (
@@ -56,7 +73,11 @@ function App() {
           ) : (
             <div className="screens-grid">
               {screens.map((screen) => (
-                <ScreenCard key={screen.id} screen={screen} />
+                <ScreenCard 
+                  key={screen.id} 
+                  screen={screen} 
+                  onDelete={handleDeleteScreen} 
+                />
               ))}
             </div>
           )
