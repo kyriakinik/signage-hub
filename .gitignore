@@ -1,17 +1,45 @@
-# Virtual Environment
-backend/venv/
+# ==========================================
+# 1. PYTHON / DJANGO
+# ==========================================
+# Εικονικό περιβάλλον (ποτέ δεν ανεβαίνει στο Git)
 venv/
-ENV/
+.venv/
+env/
 
-# Python Cache
+# Python compiled bytecode (δημιουργείται αυτόματα κατά την εκτέλεση)
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Database
-backend/db.sqlite3
+# Βάση δεδομένων SQLite
+# (Στο Git ανεβάζουμε τα migrations, ΟΧΙ το ίδιο το αρχείο της βάσης δεδομένων)
+*.sqlite3
+db.sqlite3
 
-# Node / React (για αργότερα)
-node_modules/
-dist/
+# Αρχεία μεταβλητών περιβάλλοντος / API keys
 .env
+.env.local
+
+# ==========================================
+# 2. REACT / NODE (FRONTEND)
+# ==========================================
+# Φάκελος εξαρτήσεων (εγκαθίσταται μέσω npm install)
+node_modules/
+frontend/node_modules/
+
+# Production build output
+dist/
+frontend/dist/
+build/
+
+# Logs σφαλμάτων του npm
+npm-debug.log*
+yarn-debug.log*
+
+# ==========================================
+# 3. ΛΕΙΤΟΥΡΓΙΚΟ & EDITORS (OS / IDEs)
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

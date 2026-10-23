@@ -1,6 +1,6 @@
 # 📡 Signage Hub
 
-> 🚧 **Status:** Under Active Development (Work in Progress)
+> 🚀 **Status:** v1.0 (MVP Completed) — Stable Local Build
 
 Το **Signage Hub** είναι μια σύγχρονη Full-Stack εφαρμογή για την κεντρική διαχείριση, ενημέρωση και παρακολούθηση ψηφιακών οθονών (Digital Signage displays) σε πραγματικό χρόνο.
 
@@ -131,4 +131,7 @@ signage-hub/
 - [x] Σύνδεση Frontend με το REST API (Data Fetching)
 - [x] Dashboard προβολής οθονών (ScreenCard)
 - [x] Προσθήκη νέας οθόνης από το Frontend (POST Form)
-- [ ] Διαγραφή οθόνης / Toggle κατάστασης (DELETE / PATCH)
+- [x] Διαγραφή οθόνης / Toggle κατάστασης (DELETE / PATCH)
+- [ ] Live Player View (Προσομοίωση Kiosk mode / Fullscreen οθόνης)
+- [ ] Real-time Polling / WebSockets (αυτόματος συγχρονισμός περιεχομένου)
+- [ ] Authentication & User Roles (Διαχειριστές vs Απλοί χρήστες)
